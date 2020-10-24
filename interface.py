@@ -4,11 +4,11 @@ class Interface:
         self.pages = ["Compra Gamer", "Gezatek", "Venex", "Full H4rd"]
         self.pages_to_search = []
         self.product_to_search = ""
+        self.search_type = 1
         self.__message_product_to_search()
         self.__message_pages_to_search()
+        self.__message_search_type()
         self.__results()
-        print("\n Los resultados seran exportados en un CSV con el nombre de " +
-              str(self.product_to_search) + ".csv")
 
     def __message_product_to_search(self):
         self.product_to_search = input("***************************************************************"
@@ -30,12 +30,27 @@ class Interface:
             if (boolean.lower() == "si"):
                 self.pages_to_search.append(page)
 
+    def __message_search_type(self):
+        self.search_type = input("\n ¿ Que tipo de busqueda quieres realizar ?"
+                                 + "\n"
+                                 + "\n 1 - Publicación con la frase exacta"
+                                 + "\n 2 - Publicación que contenga todas las palabras"
+                                 + "\n 3 - Publicación que contenga algunas de las palabras"
+                                 + "\n"
+                                 + "\n ")
+
     def __results(self):
         print("\n***************************************************************"
               + "\n"
               + "\n Se realizara la una busqueda de " +
               str(self.product_to_search)
               + "\n "
+              + "\n Tipo: " + str(self.search_type)
+              + "\n "
               + "\n En las siguientes paginas:")
         for page in self.pages_to_search:
             print("- " + str(page))
+
+
+if __name__ == "__main__":
+    Interface()

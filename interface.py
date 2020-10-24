@@ -2,6 +2,7 @@ class Interface:
 
     def __init__(self):
         self.pages = ["Compra Gamer", "Gezatek", "Venex", "Full H4rd"]
+        # TODO: Sacar la informacion de pages.txt
         self.pages_to_search = []
         self.product_to_search = ""
         self.search_type = 1
@@ -51,6 +52,11 @@ class Interface:
         for page in self.pages_to_search:
             print("- " + str(page))
 
+    def get_pages_to_search(self):
+        return self.pages_to_search
 
-if __name__ == "__main__":
-    Interface()
+    def get_product_to_search(self):
+        return self.product_to_search
+
+    def get_search_type(self):
+        return self.search_type

@@ -9,4 +9,6 @@ import scrapy
 class TrzpidersItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    titulo = scrapy.Field()
+    precio = scrapy.Field()
+    categoria = scrapy.Field()

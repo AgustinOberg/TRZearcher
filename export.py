@@ -41,9 +41,3 @@ class Export:
             for product in product_price:
                 self.__write(Page=str(page), Product=str(
                     product[0]), Price=str(product[1]))
-
-
-if __name__ == "__main__":
-    dic = {"CompraGamer": [["Nvidia RTX 2080", "70000"], [
-        "Nvidia RTX 2080 TI", "90000"]], "Venex": [["Nvidia RTX 2080 TI", "95000"]]}
-    Export("Nvidia RTX 2080", dic).write()

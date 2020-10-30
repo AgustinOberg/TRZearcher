@@ -1,18 +1,19 @@
-from pages_reader import PagesReader
-
+import os
+import shutil
+from searcher.trzpiders.trzpiders.spiders.orchestrator import Orchestrator
 
 class Interface:
 
     def __init__(self):
         self.pages = ["Compra Gamer", "Gezatek", "Venex", "Full H4rd"]
         self.active_pages = []
-        self.pages_to_search = PagesReader().get_url()
+        self.pages_to_search = self.__reader()
         self.search_type = 1
         self.__message_product_to_search()
         self.__message_pages_to_search()
         self.__message_search_type()
-        self.__results()
-        self.process_product_to_search()
+        self.__process_product_to_search()
+        #Orchestrator().execute_spiders(self.pages, self.product)
 
 
     def __message_product_to_search(self):
@@ -35,7 +36,7 @@ class Interface:
                 "\n Quieres incluir en tu comparacion a " + str(page) + "? ")
             if (boolean.lower() == "si"):
                 self.active_pages.append(self.pages_to_search[i])
-                i+=1
+                i += 1
 
     def __message_search_type(self):
         self.search_type = input("\n ¿ Que tipo de busqueda quieres realizar ?"
@@ -46,30 +47,25 @@ class Interface:
                                  + "\n"
                                  + "\n ")
 
-    def __results(self):
-        print("\n***************************************************************"
-              + "\n"
-              + "\n Se realizara la una busqueda de " +
-              str(self.pages_to_search)
-              + "\n "
-              + "\n Tipo: " + str(self.search_type)
-              + "\n "
-              + "\n En las siguientes paginas:")
-        for page in self.active_pages:
-            print("- " + str(page))
 
-    def get_pages_to_search(self):
-        return self.active_pages
+    def __process_product_to_search(self):
+        pages_complete = []
+        number_of_pages = 0
+        with open("pages_initials.txt", "r") as pages_file:
+            for page in pages_file:
+                number_of_pages +=1
+                page = page.rstrip('\n') + self.product + "\n"
+                pages_complete.append(page)
+        with open("pages_complete.txt", "w") as pages_file:
+            for x in range(0,number_of_pages):
+                pages_file.write(pages_complete[x])
+        shutil.move("pages_complete.txt", ("" +os.getcwd() + "/searcher/trzpiders/trzpiders/spiders/pages_complete.txt"))
+        a =  open("pages_complete.txt", "w")
 
-    def process_product_to_search(self):
-        pages = []
-        with open("pages.txt", 'r') as pages_file:
-            for line in pages_file:
-                pages.append(line)
-        for page in pages:
-            page += self.product
 
-        print(pages)
 
-    def get_search_type(self):
-        return self.search_type
+
+    def __reader(self):
+        with open("pages_initials.txt", 'r') as pages_file:
+            pages = list(map(str.rstrip, pages_file))
+        return pages

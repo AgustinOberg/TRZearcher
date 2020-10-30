@@ -8,3 +8,4 @@ class TrzpidersItem(scrapy.Item):
     price = scrapy.Field()
     category = scrapy.Field()
     link = scrapy.Field()
+    time = scrapy.Field()

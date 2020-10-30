@@ -1,11 +1,8 @@
-import scrapy
 import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from scrapy.exceptions import CloseSpider
-from scrapy.crawler import CrawlerProcess
-from trzpiders.items import TrzpidersItem
-
+from searcher.trzpiders.trzpiders.items import TrzpidersItem
+from datetime import datetime
 
 class VenexSpider(CrawlSpider):
     """
@@ -45,16 +42,6 @@ class VenexSpider(CrawlSpider):
         item['category'] = str(response.css(
             '.headerNavigation+ .headerNavigation::text').extract_first()).capitalize().strip()
         item['link'] = str(response.url)
+        item['time'] = (str(datetime.now().year) + "-" + str(datetime.now().month) + "-" + str(
+            datetime.now().day) + " " + str(datetime.now().hour) + ":" + str(datetime.now().minute))
         yield item
-
-    def turn_on_spider(self):
-        """
-            Enciende el spider
-        """
-        process = CrawlerProcess(
-            {'USER_AGENT': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'})
-        process.crawl(VenexSpider)
-        process.start()
-        
-if __name__ == "__main__":
-    VenexSpider().turn_on_spider()

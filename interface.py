@@ -3,8 +3,8 @@ class Interface:
 
     def __init__(self):
         self.pages = ["Compra Gamer", "Gezatek", "Venex", "Full H4rd"]
-        self.pages_to_search = PagesReader().get_url()
-        self.product_to_search = ""
+        self.pages_to_search = []
+        self.product_to_search = PagesReader().get_url()
         self.search_type = 1
         self.__message_product_to_search()
         self.__message_pages_to_search()

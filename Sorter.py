@@ -45,6 +45,3 @@ class Sorter:
 
     def export(self):
         Export(self.product_to_search, self.dictionary).write()
-
-if __name__ == '__main__':
-    Sorter(['venex'],'Placa de Video MSI Nvidia GeForce GT 1030 OC Low Profile 2G')

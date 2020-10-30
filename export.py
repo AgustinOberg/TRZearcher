@@ -22,5 +22,6 @@ class Export:
         file = open(self.__file_name, "w", newline='\n')
         with file:
             write = csv.writer(file)
+            write.writerow(["Page", "Category", "Title", "Price", "Link", "Time"])
             for product in self.__ordered_products:
                 write.writerow(product)

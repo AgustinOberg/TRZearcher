@@ -1,10 +1,10 @@
+from pages_reader import PagesReader
 class Interface:
 
     def __init__(self):
         self.pages = ["Compra Gamer", "Gezatek", "Venex", "Full H4rd"]
-        # TODO: Sacar la informacion de pages.txt
         self.pages_to_search = []
-        self.product_to_search = ""
+        self.product_to_search = PagesReader().get_url()
         self.search_type = 1
         self.__message_product_to_search()
         self.__message_pages_to_search()

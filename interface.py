@@ -1,5 +1,6 @@
 from pages_reader import PagesReader
-from orchestrator  import Orchestrator
+
+
 class Interface:
 
     def __init__(self):
@@ -11,8 +12,7 @@ class Interface:
         self.__message_pages_to_search()
         self.__message_search_type()
         self.__results()
-
-
+        self.process_product_to_search()
 
 
     def __message_product_to_search(self):
@@ -61,8 +61,15 @@ class Interface:
     def get_pages_to_search(self):
         return self.active_pages
 
-    def get_product_to_search(self):
-        return self.pages_to_search
+    def process_product_to_search(self):
+        pages = []
+        with open("pages.txt", 'r') as pages_file:
+            for line in pages_file:
+                pages.append(line)
+        for page in pages:
+            page += self.product
+
+        print(pages)
 
     def get_search_type(self):
         return self.search_type

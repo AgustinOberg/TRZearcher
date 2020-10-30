@@ -1,14 +1,11 @@
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/items.html
-
 import scrapy
 
-
 class TrzpidersItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    titulo = scrapy.Field()
-    precio = scrapy.Field()
-    categoria = scrapy.Field()
+    """
+        Define que items vamos a recolectar con nuestro Scrapy
+    """
+    title = scrapy.Field()
+    price = scrapy.Field()
+    category = scrapy.Field()
+    link = scrapy.Field()
+    time = scrapy.Field()

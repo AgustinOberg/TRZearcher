@@ -5,15 +5,17 @@ from searcher.trzpiders.trzpiders.spiders.venex import VenexSpider
 from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 
-class Ejecutor:
 
-    def ejecutar(self):
+class Orchestrator:
+
+    def execute_spiders(self, titles, product):
         process = CrawlerProcess(get_project_settings())
-        process.crawl(CompragamerSpider)
-        process.crawl(Fullh4ardSpider)
-        process.crawl(GezatekSpider)
-        process.crawl(VenexSpider)
+        if 'Compra Gamer' in titles:
+            process.crawl(CompragamerSpider)
+        if 'Full H4rd' in titles:
+            process.crawl(Fullh4ardSpider)
+        if 'Gezatek' in titles:
+            process.crawl(GezatekSpider)
+        if 'Venex' in titles:
+            process.crawl(VenexSpider)
         process.start()
-
-if __name__ == '__main__':
-    Ejecutor().ejecutar()

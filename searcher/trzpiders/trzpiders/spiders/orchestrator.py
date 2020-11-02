@@ -19,3 +19,6 @@ class Orchestrator:
         if 'Venex' in titles:
             process.crawl(VenexSpider)
         process.start()
+
+if __name__ == '__main__':
+    Orchestrator().execute_spiders(['Compra Gamer','Full H4rd', 'Gezatek', 'Venex'], 'Nvidia')

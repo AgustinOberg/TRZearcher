@@ -9,7 +9,7 @@ from scrapy.crawler import CrawlerProcess
 
 class Orchestrator:
 
-    def execute_spiders(self, titles, product):
+    def execute_spiders(self, titles):
         process = CrawlerProcess(get_project_settings())
         if 'Compra Gamer' in titles:
             process.crawl(CompragamerSpider)
@@ -23,5 +23,6 @@ class Orchestrator:
             process.crawl(VenexSpider)
         process.start()
 
+
 if __name__ == '__main__':
-    Orchestrator().execute_spiders(["Compra Gamer","FullH4rd", "Gezatek", "Venex", "Overdrive"], 'Nvidia')
+    Orchestrator().execute_spiders(["Compra Gamer", "FullH4rd", "Gezatek", "Venex", "Overdrive"])

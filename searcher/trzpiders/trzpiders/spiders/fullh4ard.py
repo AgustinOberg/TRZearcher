@@ -2,6 +2,7 @@ import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from searcher.trzpiders.trzpiders.items import TrzpidersItem
+from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
 
@@ -15,6 +16,8 @@ class Fullh4ardSpider(CrawlSpider):
     custom_settings = {'FEEDS': {'fullh4rd.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
 
     allowed_domains = ['www.fullh4rd.com.ar']  # Dominio que manejamos, del cual no puede salir
+
+    item_count = 0
 
     # Buscamos la url completa
     url = ""
@@ -58,5 +61,9 @@ class Fullh4ardSpider(CrawlSpider):
 
         item['time'] = (str(datetime.now().year) + "-" + str(datetime.now().month) + "-" + str(
             datetime.now().day) + " " + str(datetime.now().hour) + ":" + str(datetime.now().minute))
+
+        self.item_count += 1
+        if self.item_count > 15:
+            raise CloseSpider('item exceeded')
 
         yield item

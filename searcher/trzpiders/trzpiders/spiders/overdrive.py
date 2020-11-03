@@ -2,18 +2,22 @@ import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from searcher.trzpiders.trzpiders.items import TrzpidersItem
+from scrapy.exceptions import CloseSpider
 from datetime import datetime
+
 
 class OverdriveSpider(CrawlSpider):
     """
         Spider que recolecta datos de la pagina www.fullh4rd.com.ar
     """
 
-    name = 'overdrive' # Nombre de la araña
+    name = 'overdrive'  # Nombre de la araña
 
-    custom_settings = {'FEEDS': {'overdrive.csv': {'format': 'csv'}}} # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'overdrive.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
 
-    allowed_domains = ['www.overdrivepc.com.ar'] # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['www.overdrivepc.com.ar']  # Dominio que manejamos, del cual no puede salir
+
+    item_count = 0
 
     # Buscamos la url completa
     url = ""
@@ -22,7 +26,7 @@ class OverdriveSpider(CrawlSpider):
             if page.find("overdrivepc") > 0:
                 url = page
 
-    start_urls = [url] # URL donde extraemos los datos
+    start_urls = [url]  # URL donde extraemos los datos
 
     # Reglas que debera respetar la spider
     rules = {
@@ -56,5 +60,9 @@ class OverdriveSpider(CrawlSpider):
 
         item['time'] = (str(datetime.now().year) + "-" + str(datetime.now().month) + "-" + str(
             datetime.now().day) + " " + str(datetime.now().hour) + ":" + str(datetime.now().minute))
+
+        self.item_count += 1
+        if self.item_count > 15:
+            raise CloseSpider('item exceeded')
 
         yield item

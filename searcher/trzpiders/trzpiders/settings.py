@@ -12,4 +12,4 @@ USER_AGENT = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot
 ROBOTSTXT_OBEY = True
 
 # Delay entre descargas
-DOWNLOAD_DELAY = 0
+DOWNLOAD_DELAY = 1

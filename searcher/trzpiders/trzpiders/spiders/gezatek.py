@@ -5,16 +5,17 @@ from searcher.trzpiders.trzpiders.items import TrzpidersItem
 from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
+
 class GezatekSpider(CrawlSpider):
     """
         Spider que recolecta datos de la pagina www.gezatek.com.ar
     """
 
-    name = 'gezatek' # Nombre de la araña
+    name = 'gezatek'  # Nombre de la araña
 
-    custom_settings = {'FEEDS': {'gezatek.csv': {'format': 'csv'}}} # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'gezatek.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
 
-    allowed_domains = ['www.gezatek.com.ar'] # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['www.gezatek.com.ar']  # Dominio que manejamos, del cual no puede salir
 
     item_count = 0
 
@@ -25,7 +26,7 @@ class GezatekSpider(CrawlSpider):
             if page.find("gezatek") > 0:
                 url = page
 
-    start_urls = [url] # URL donde extraemos los datos
+    start_urls = [url]  # URL donde extraemos los datos
 
     # Reglas que debera respetar la spider
     rules = {

@@ -31,23 +31,23 @@ class Sorter:
         """
 
         for page in self.pages_to_search:
-                with open(self.rute+page+".csv", 'r', encoding="utf-8") as f:
-                    file = csv.DictReader(f, delimiter=",")
+            with open(self.rute + page + ".csv", 'r', encoding="utf-8") as f:
+                file = csv.DictReader(f, delimiter=",")
 
-                    for line in file:
-                        price = line["price"].replace('"',"")
-                        price = price.replace(',',"")
-                        price = price.replace('.00',"")
-                        price = price.replace('.', "")
+                for line in file:
+                    price = line["price"].replace('"', "")
+                    price = price.replace(',', "")
+                    price = price.replace('.00', "")
+                    price = price.replace('.', "")
 
-                        product = [page,line["category"].lower(), line["title"].lower(), int(price), line["link"],line["time"]]
-                        if line["title"].lower() == self.product_to_search:
-                            self.exact_words.append(product)
-                        else:
-                            self.not_exact_words.append(product)
+                    product = [page, line["category"].lower(), line["title"].lower(), int(price), line["link"],
+                               line["time"]]
+                    if line["title"].lower() == self.product_to_search:
+                        self.exact_words.append(product)
+                    else:
+                        self.not_exact_words.append(product)
 
         self.exact_words.sort(key=lambda e: e[3])
-
 
     def __export(self):
         """
@@ -60,23 +60,22 @@ class Sorter:
         """
         self.__dict_n_coincidences_to_products()
         words = self.product_to_search.split()
-        if(self.search_type == 1):
+        if self.search_type == 1:
             Export(self.product_to_search, self.exact_words).write()
 
-        elif(self.search_type == 2):
+        elif self.search_type == 2:
             products_all_words = self.matching_words_to_product[len(words)]
             products_all_words.sort(key=lambda e: e[3])
             products_all_words = self.exact_words + products_all_words
             Export(self.product_to_search, products_all_words).write()
 
-        elif(self.search_type == 3):
+        elif self.search_type == 3:
             products_some_words = list()
             for x in range(len(words)):
-                products_some_words += self.matching_words_to_product[x+1]
+                products_some_words += self.matching_words_to_product[x + 1]
             products_some_words.sort(key=lambda e: e[3])
             products_some_words = self.exact_words + products_some_words
             Export(self.product_to_search, products_some_words).write()
-
 
     def __dict_n_coincidences_to_products(self):
         """
@@ -101,5 +100,5 @@ class Sorter:
         """
         self.matching_words_to_product = dict()
         words = self.product_to_search.split()
-        for x in range(len(words)+1):
+        for x in range(len(words) + 1):
             self.matching_words_to_product[x] = list()

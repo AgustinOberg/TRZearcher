@@ -38,3 +38,5 @@ _Este proyecto fue realizado por:_
 * **Aguilera Agustín**  - [Aguilera-Agustín](https://github.com/Aguilera-Agustin)   
 * **Ambrosetti Ramiro**  - [Ramitax](https://github.com/Ramitax)
 * **Noguera Sol**  - [solnoguera](https://github.com/solnoguera)
+* **Tabarovsky Javier**  - [JaviTaba](https://github.com/JaviTaba)
+

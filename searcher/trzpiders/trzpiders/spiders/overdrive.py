@@ -2,6 +2,7 @@ import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from searcher.trzpiders.trzpiders.items import TrzpidersItem
+from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
 class OverdriveSpider(CrawlSpider):
@@ -14,6 +15,8 @@ class OverdriveSpider(CrawlSpider):
     custom_settings = {'FEEDS': {'overdrive.csv': {'format': 'csv'}}} # Forma de exportar los datos recolectados
 
     allowed_domains = ['www.overdrivepc.com.ar'] # Dominio que manejamos, del cual no puede salir
+
+    item_count = 0
 
     # Buscamos la url completa
     url = ""
@@ -56,5 +59,9 @@ class OverdriveSpider(CrawlSpider):
 
         item['time'] = (str(datetime.now().year) + "-" + str(datetime.now().month) + "-" + str(
             datetime.now().day) + " " + str(datetime.now().hour) + ":" + str(datetime.now().minute))
+
+        self.item_count += 1
+        if self.item_count > 15:
+            raise CloseSpider('item exceeded')
 
         yield item

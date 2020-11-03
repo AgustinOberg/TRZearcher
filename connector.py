@@ -20,7 +20,7 @@ class Connector:
             self.pages.append("overdrive")
         self.__process_product_to_search()
         self.type_search = type_search
-        Orchestrator().execute_spiders(self.pages, self.product)
+        #Orchestrator().execute_spiders(self.pages, self.product)
         Sorter(self.pages, self.product, type_search).execute_sorter()
 
     def __process_product_to_search(self):

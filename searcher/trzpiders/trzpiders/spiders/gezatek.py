@@ -2,6 +2,7 @@ import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from searcher.trzpiders.trzpiders.items import TrzpidersItem
+from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
 class GezatekSpider(CrawlSpider):
@@ -14,6 +15,8 @@ class GezatekSpider(CrawlSpider):
     custom_settings = {'FEEDS': {'gezatek.csv': {'format': 'csv'}}} # Forma de exportar los datos recolectados
 
     allowed_domains = ['www.gezatek.com.ar'] # Dominio que manejamos, del cual no puede salir
+
+    item_count = 0
 
     # Buscamos la url completa
     url = ""
@@ -57,5 +60,9 @@ class GezatekSpider(CrawlSpider):
 
         item['time'] = (str(datetime.now().year) + "-" + str(datetime.now().month) + "-" + str(
             datetime.now().day) + " " + str(datetime.now().hour) + ":" + str(datetime.now().minute))
+
+        self.item_count += 1
+        if self.item_count > 15:
+            raise CloseSpider('item exceeded')
 
         yield item

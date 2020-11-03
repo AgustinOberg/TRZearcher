@@ -1,70 +1,53 @@
-import os
-import shutil
-from searcher.trzpiders.trzpiders.spiders.orchestrator import Orchestrator
-from scrapy.utils.project import get_project_settings
-from scrapy.crawler import CrawlerProcess
+from tkinter import *
+from connector import Connector
+
+window = Tk()
+window.title("TRZ - Scrapy Master")
+window.resizable(False, False)
+window.iconbitmap("./resources/icon.ico")
+
+frame = Frame(window, bg="#E6B0AA", width='650', height='500', bd=10, relief='ridge', cursor='hand2')
+frame.pack()
+
+Label(frame, text='Desarrollado por TRZ', font=('Microsoft YaHei', 7), fg="#E6B0AA", bg="black").place(x=532, y=460)
+Label(frame, text='BIENVENIDO A SCRAPY MASTER', font=('Microsoft YaHei', 20), bg="#E6B0AA").place(x=100, y=30)
+Label(frame, text='Producto a buscar', font=('Microsoft YaHei', 15), bg="#E6B0AA").place(x=135, y=100)
+Label(frame, text='Paginas en las cuales buscar:', font=('Microsoft YaHei', 15), bg="#E6B0AA").place(x=135, y=150)
+Label(frame, text='Tipo de busqueda:', font=('Microsoft YaHei', 15), bg="#E6B0AA").place(x=135, y=290)
+
+product = StringVar()
+Entry(frame, justify='center', font=('Microsoft YaHei', 10), textvariable=product).place(x=326, y=106)
+
+compra_gamer = IntVar()
+Checkbutton(frame, text='Compra Gamer', font=('Microsoft YaHei', 12), variable=compra_gamer, onvalue=1, offvalue=0,
+            bg="#E6B0AA").place(x=135, y=180)
+full_hard = IntVar()
+Checkbutton(frame, text='Full H4rd', font=('Microsoft YaHei', 12), variable=full_hard, onvalue=1, offvalue=0,
+            bg="#E6B0AA").place(x=135, y=210)
+gezatek = IntVar()
+Checkbutton(frame, text='Gezatek', font=('Microsoft YaHei', 12), variable=gezatek, onvalue=1, offvalue=0,
+            bg="#E6B0AA").place(x=135, y=240)
+venex = IntVar()
+Checkbutton(frame, text='Venex', font=('Microsoft YaHei', 12), variable=venex, onvalue=1, offvalue=0,
+            bg="#E6B0AA").place(x=295, y=180)
+overdrive = IntVar()
+Checkbutton(frame, text='Overdrive', font=('Microsoft YaHei', 12), variable=overdrive, onvalue=1, offvalue=0,
+            bg="#E6B0AA").place(x=295, y=210)
+
+option = IntVar()
+Radiobutton(frame, text='Publicación con la frase exacta', variable=option, value=0, font=('Microsoft YaHei', 12),
+            bg="#E6B0AA").place(x=135, y=320)
+Radiobutton(frame, text='Publicación que contenga todas las palabras', variable=option, value=1,
+            font=('Microsoft YaHei', 12), bg="#E6B0AA").place(x=135, y=350)
+Radiobutton(frame, text='Publicación que contenga algunas de las palabras', variable=option, value=2,
+            font=('Microsoft YaHei', 12), bg="#E6B0AA").place(x=135, y=380)
 
 
-class Interface:
+def __code_button():
+    Connector(product.get(),compra_gamer.get(), full_hard.get(), gezatek.get(), venex.get(), overdrive.get(), option.get())
+    window.destroy()
 
-    def __init__(self):
-        self.pages = ["Compra Gamer", "Gezatek", "Venex", "Full H4rd"]
-        self.active_pages = []
-        self.pages_to_search = self.__reader()
-        self.search_type = 1
-        self.__message_product_to_search()
-        self.__message_pages_to_search()
-        self.__message_search_type()
-        self.__process_product_to_search()
-        #Orchestrator().execute_spiders(self.pages, self.product)
+Button(frame, text="BUSCAR", font=('Microsoft YaHei', 13), bg="dark gray", command=__code_button,
+       fg="#E6B0AA", background='black').place(x=270, y=430)
 
-    def __message_product_to_search(self):
-        self.product = input("***************************************************************"
-                             + "\n"
-                             + "\n                     CHOOGLE"
-                             + "\n                       TRZ"
-                             + "\n"
-                             + "\n Somos un buscador/comparador de precios de productos GAMERS"
-                             + "\n"
-                             + "\n Introduzca el producto a buscar: ")
-
-    def __message_pages_to_search(self):
-        print("\n***************************************************************"
-              + "\n"
-              + "\n Responder con un si en el caso de querer incluirla")
-        i = 0
-        for page in self.pages:
-            boolean = input(
-                "\n Quieres incluir en tu comparacion a " + str(page) + "? ")
-            if boolean.lower() == "si":
-                self.active_pages.append(self.pages_to_search[i])
-                i += 1
-
-    def __message_search_type(self):
-        self.search_type = input("\n ¿ Que tipo de busqueda quieres realizar ?"
-                                 + "\n"
-                                 + "\n 1 - Publicación con la frase exacta"
-                                 + "\n 2 - Publicación que contenga todas las palabras"
-                                 + "\n 3 - Publicación que contenga algunas de las palabras"
-                                 + "\n"
-                                 + "\n ")
-
-    def __process_product_to_search(self):
-        pages_complete = []
-        number_of_pages = 0
-        with open("pages_initials.txt", "r") as pages_file:
-            for page in pages_file:
-                number_of_pages += 1
-                page = page.rstrip('\n') + self.product + "\n"
-                pages_complete.append(page)
-        with open("pages_complete.txt", "w") as pages_file:
-            for x in range(0, number_of_pages):
-                pages_file.write(pages_complete[x])
-        shutil.move("pages_complete.txt",
-                    ("" + os.getcwd() + "/searcher/trzpiders/trzpiders/spiders/pages_complete.txt"))
-        a = open("pages_complete.txt", "w")
-
-    def __reader(self):
-        with open("pages_initials.txt", 'r') as pages_file:
-            pages = list(map(str.rstrip, pages_file))
-        return pages
+window.mainloop()

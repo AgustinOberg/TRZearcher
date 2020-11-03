@@ -1,7 +1,7 @@
 import os
 import shutil
 from searcher.trzpiders.trzpiders.spiders.orchestrator import Orchestrator
-
+from Sorter import Sorter
 
 class Connector:
 
@@ -9,18 +9,19 @@ class Connector:
         self.product = product
         self.pages = []
         if (compragamer == 1):
-            self.pages.append("Compra Gamer")
+            self.pages.append("compragamer")
         if (fullhard == 1):
-            self.pages.append("FullH4rd")
+            self.pages.append("fullh4rd")
         if (gezatek == 1):
-            self.pages.append("Gezatek")
+            self.pages.append("gezatek")
         if (venex == 1):
-            self.pages.append("Venex")
+            self.pages.append("venex")
         if (overdrive == 1):
-            self.pages.append("Overdrive")
+            self.pages.append("overdrive")
         self.__process_product_to_search()
         self.type_search = type_search
         Orchestrator().execute_spiders(self.pages, self.product)
+        Sorter(self.pages, self.product, type_search).execute_sorter()
 
     def __process_product_to_search(self):
         pages_complete = []
@@ -36,3 +37,4 @@ class Connector:
         shutil.move("pages_complete.txt",
                     ("" + os.getcwd() + "/searcher/trzpiders/trzpiders/spiders/pages_complete.txt"))
         a = open("pages_complete.txt", "w")
+

@@ -10,7 +10,7 @@ from datetime import datetime
 
 class Export:
 
-    def init(self, product_to_search, orderded_products):
+    def __init__(self, product_to_search, orderded_products):
         self.ordered_products = orderded_products
         self.date = datetime.now()
         self.file_name = str(product_to_search) + "-" + str(self.date.day) + "-" + \

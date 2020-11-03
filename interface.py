@@ -35,13 +35,12 @@ Checkbutton(frame, text='Overdrive', font=('Microsoft YaHei', 12), variable=over
             bg="#E6B0AA").place(x=295, y=210)
 
 option = IntVar()
-Radiobutton(frame, text='Publicación con la frase exacta', variable=option, value=0, font=('Microsoft YaHei', 12),
+radio_button_1 = Radiobutton(frame, text='Publicación con la frase exacta', variable=option, value=1, font=('Microsoft YaHei', 12),
             bg="#E6B0AA").place(x=135, y=320)
-Radiobutton(frame, text='Publicación que contenga todas las palabras', variable=option, value=1,
+radio_button_2 = Radiobutton(frame, text='Publicación que contenga todas las palabras', variable=option, value=2,
             font=('Microsoft YaHei', 12), bg="#E6B0AA").place(x=135, y=350)
-Radiobutton(frame, text='Publicación que contenga algunas de las palabras', variable=option, value=2,
+radio_button_3 = Radiobutton(frame, text='Publicación que contenga algunas de las palabras', variable=option, value=3,
             font=('Microsoft YaHei', 12), bg="#E6B0AA").place(x=135, y=380)
-
 
 def __code_button():
     Connector(product.get(),compra_gamer.get(), full_hard.get(), gezatek.get(), venex.get(), overdrive.get(), option.get())

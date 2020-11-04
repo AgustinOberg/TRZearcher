@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import os
 
 """
     La clase Export recibe por parametro el producto que estamos buscando, y una lista con listas en cada posicion
@@ -17,7 +18,7 @@ class Export:
             str(self.date.month) + "-" + str(self.date.year) + ".csv"
 
     def write(self):
-        file = open(self.file_name, "w", newline='\n')
+        file = open(os.path.abspath("../../TRZearcher") + "//" + self.file_name, "w", newline='\n')
         with file:
             write = csv.writer(file)
             write.writerow(["Page", "Category", "Title", "Price", "Link", "Time"])

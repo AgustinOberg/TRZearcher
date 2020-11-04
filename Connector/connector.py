@@ -1,6 +1,6 @@
 from Searcher.Spiders.orchestrator import Orchestrator
 from Processor.sorter import Sorter
-
+import os
 class Connector:
 
     def __init__(self, product, compragamer, fullhard, gezatek, venex, overdrive, type_search):
@@ -21,14 +21,17 @@ class Connector:
         Orchestrator().execute_spiders(self.pages)
         Sorter(self.pages, self.product, type_search).execute_sorter()
 
+
     def __process_product_to_search(self):
         pages_complete = []
         number_of_pages = 0
-        with open("C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/Searcher/Data/pages_initials.txt", "r") as pages_file:
+        fileInitials = os.path.abspath("../Searcher/Data/pages_initials.txt")
+        fileComplete = os.path.abspath("../Searcher/Data/pages_complete.txt")
+        with open(fileInitials, "r") as pages_file:
             for page in pages_file:
                 number_of_pages += 1
                 page = page.rstrip('\n') + self.product + "\n"
                 pages_complete.append(page)
-        with open("C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/Searcher/Data/pages_complete.txt", "w") as pages_file:
+        with open(fileComplete, "w") as pages_file:
             for x in range(0, number_of_pages):
                 pages_file.write(pages_complete[x])

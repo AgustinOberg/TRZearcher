@@ -21,7 +21,8 @@ class Fullh4ardSpider(CrawlSpider):
 
     # Buscamos la url completa
     url = ""
-    with open("C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/Searcher/Data/pages_complete.txt", "r") as pages:
+    filePath = os.path.abspath("../Searcher/Data/pages_complete.txt")
+    with open(filePath, "r") as pages:
         for page in pages:
             if page.find("fullh4rd") > 0:
                 url = page

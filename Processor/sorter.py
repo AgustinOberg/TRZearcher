@@ -1,7 +1,7 @@
 import csv
 
 from Processor.export import Export
-
+import os
 
 class Sorter:
     """
@@ -10,10 +10,10 @@ class Sorter:
     para crear el .csv final.
     """
 
-    def __init__(self, pages_to_search, product_to_search, search_type, rute="C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/"):
+    def __init__(self, pages_to_search, product_to_search, search_type):
         self.pages_to_search = pages_to_search
         self.product_to_search = product_to_search.lower()
-        self.rute = rute
+        self.rute = os.path.abspath("..//")
         self.search_type = search_type
         self.exact_words = list()
         self.not_exact_words = list()

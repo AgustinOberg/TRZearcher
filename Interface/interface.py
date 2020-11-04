@@ -1,10 +1,12 @@
 from tkinter import *
 from Connector.connector import Connector
+import os
 
 window = Tk()
 window.title("TRZ - Scrapy Master")
 window.resizable(False, False)
-window.iconbitmap("C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/Interface/resources/icon.ico")
+iconPath = os.path.abspath("./resources/icon.ico")
+
 
 frame = Frame(window, bg="#E6B0AA", width='650', height='500', bd=10, relief='ridge', cursor='hand2')
 frame.pack()

@@ -7,11 +7,11 @@ window.title("TRZ - Scrapy Master")
 window.resizable(False, False)
 
 
-frame = Frame(window, bg="#cce7e8", width='650', height='500', bd=10, relief='ridge', cursor='hand2')
+frame = Frame(window, bg="#cce7e8", width='650', height='500', bd=10, relief='ridge')
 frame.pack()
 
 Label(frame, text='Desarrollado por TRZ', font=('Microsoft YaHei', 7), fg="#cce7e8", bg="black").place(x=532, y=460)
-Label(frame, text='BIENVENIDO A SCRAPY MASTER', font=('Microsoft YaHei', 20), bg="#cce7e8").place(x=100, y=30)
+Label(frame, text='BIENVENIDO A TRZEARCHER', font=('Microsoft YaHei', 20), bg="#cce7e8").place(x=100, y=30)
 Label(frame, text='Producto a buscar', font=('Microsoft YaHei', 15), bg="#cce7e8").place(x=135, y=100)
 Label(frame, text='Paginas en las cuales buscar:', font=('Microsoft YaHei', 15), bg="#cce7e8").place(x=135, y=150)
 Label(frame, text='Tipo de busqueda:', font=('Microsoft YaHei', 15), bg="#cce7e8").place(x=135, y=290)

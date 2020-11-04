@@ -13,7 +13,7 @@ class Sorter:
     def __init__(self, pages_to_search, product_to_search, search_type):
         self.pages_to_search = pages_to_search
         self.product_to_search = product_to_search.lower()
-        self.rute = os.path.abspath("..//")
+        self.rute = os.path.abspath("..//Interface")
         self.search_type = search_type
         self.exact_words = list()
         self.not_exact_words = list()
@@ -31,7 +31,7 @@ class Sorter:
         """
 
         for page in self.pages_to_search:
-            with open(self.rute + page + ".csv", 'r', encoding="utf-8") as f:
+            with open(self.rute + "//" + page + ".csv", 'r', encoding="utf-8") as f:
                 file = csv.DictReader(f, delimiter=",")
 
                 for line in file:

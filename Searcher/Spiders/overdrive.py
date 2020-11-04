@@ -1,29 +1,29 @@
 import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from searcher.trzpiders.trzpiders.items import TrzpidersItem
+from Searcher.Config.items import TrzpidersItem
 from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
 
-class GezatekSpider(CrawlSpider):
+class OverdriveSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.gezatek.com.ar
+        Spider que recolecta datos de la pagina www.fullh4rd.com.ar
     """
 
-    name = 'gezatek'  # Nombre de la araña
+    name = 'overdrive'  # Nombre de la araña
 
-    custom_settings = {'FEEDS': {'gezatek.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'overdrive.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
 
-    allowed_domains = ['www.gezatek.com.ar']  # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['www.overdrivepc.com.ar']  # Dominio que manejamos, del cual no puede salir
 
     item_count = 0
 
     # Buscamos la url completa
     url = ""
-    with open("pages_complete.txt", "r") as pages:
+    with open("C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/Searcher/Data/pages_complete.txt", "r") as pages:
         for page in pages:
-            if page.find("gezatek") > 0:
+            if page.find("overdrivepc") > 0:
                 url = page
 
     start_urls = [url]  # URL donde extraemos los datos
@@ -31,13 +31,13 @@ class GezatekSpider(CrawlSpider):
     # Reglas que debera respetar la spider
     rules = {
         # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
-        Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="w-box product "]')),
+        Rule(LinkExtractor(allow=(), restrict_xpaths=('//a[@class="js-item-link item-link position-absolute w-100"]')),
              callback='parse_item', follow=False)
     }
 
     # En el caso de existir el archivo, lo elimina
     try:
-        os.remove('gezatek.csv')
+        os.remove('overdrive.csv')
     except OSError:
         pass
 
@@ -45,17 +45,16 @@ class GezatekSpider(CrawlSpider):
         """
             Recolecta la informacion de cada item
         """
-
         item = TrzpidersItem()
 
         item['title'] = str(response.css(
-            '.nombre h3::text').extract_first()).strip()
+            '#product-name::text').extract_first()).lower().capitalize().rstrip('\n').strip()
 
         item['price'] = str(response.css(
-            '.precio_web h7::text').extract_first()).strip()
+            '#price_display::text').extract_first()).rstrip('\n').strip().split("$")[1]
 
         item['category'] = str(response.css(
-            '.col-md-5 h7::text').extract_first()).capitalize().strip()
+            '.crumb:nth-child(5)::text').extract()).capitalize().strip()[2:-2]
 
         item['link'] = str(response.url)
 

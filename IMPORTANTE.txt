@@ -1,0 +1,11 @@
+REEMPLAZAR DIRECCIONES EN:
+- Clase connector
+- Clase interface
+- Clase sorter
+- Clase compragamer
+- Clase fullh4rd
+- Clase gezatek
+- Clase overdrive
+- Clase venex
+
+Esto se hace porque a algunos no les funciona de igual manera con rutas relativas

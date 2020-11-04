@@ -1,29 +1,29 @@
 import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from searcher.trzpiders.trzpiders.items import TrzpidersItem
+from Searcher.Config.items import TrzpidersItem
 from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
 
-class Fullh4ardSpider(CrawlSpider):
+class CompragamerSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.fullh4rd.com.ar
+        Spider que recolecta datos de la pagina www.compragamer.com
     """
 
-    name = 'fullh4ard'  # Nombre de la araña
+    name = 'compragamer'  # Nombre de la araña
 
-    custom_settings = {'FEEDS': {'fullh4rd.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'compragamer.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
 
-    allowed_domains = ['www.fullh4rd.com.ar']  # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['compragamer.com']  # Dominio que manejamos, del cual no puede salir
 
     item_count = 0
 
     # Buscamos la url completa
     url = ""
-    with open("pages_complete.txt", "r") as pages:
+    with open("C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/Searcher/Data/pages_complete.txt", "r") as pages:
         for page in pages:
-            if page.find("fullh4rd") > 0:
+            if page.find("compragamer") > 0:
                 url = page
 
     start_urls = [url]  # URL donde extraemos los datos
@@ -31,13 +31,13 @@ class Fullh4ardSpider(CrawlSpider):
     # Reglas que debera respetar la spider
     rules = {
         # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
-        Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="item product-list"]')),
+        Rule(LinkExtractor(allow=(), restrict_xpaths=('//*[@class="products__item"]')),
              callback='parse_item', follow=False)
     }
 
     # En el caso de existir el archivo, lo elimina
     try:
-        os.remove('fullh4rd.csv')
+        os.remove('compragamer.csv')
     except OSError:
         pass
 
@@ -49,13 +49,13 @@ class Fullh4ardSpider(CrawlSpider):
         item = TrzpidersItem()
 
         item['title'] = str(response.css(
-            'h1::text').extract_first()).lower().capitalize().rstrip('\n').strip()
+            '.filaNombre div::text').extract_first()).strip()
 
         item['price'] = str(response.css(
-            '.price-main::text').extract_first()).rstrip('\n').strip().split("$")[1]
+            '.col-xs-5::text').extract_first()).split("$")[1].strip()
 
         item['category'] = str(response.css(
-            'a:nth-child(3) span::text').extract()[2]).capitalize().strip()
+            '.detalleNombre .product-card__name::text').extract_first()).capitalize().strip()
 
         item['link'] = str(response.url)
 

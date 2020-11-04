@@ -1,6 +1,6 @@
 import csv
 
-from export import Export
+from Processor.export import Export
 
 
 class Sorter:
@@ -10,7 +10,7 @@ class Sorter:
     para crear el .csv final.
     """
 
-    def __init__(self, pages_to_search, product_to_search, search_type, rute="searcher/trzpiders/trzpiders/spiders/"):
+    def __init__(self, pages_to_search, product_to_search, search_type, rute="C://Users/ramir/Desktop/Trabajo Practico/TRZearcher/"):
         self.pages_to_search = pages_to_search
         self.product_to_search = product_to_search.lower()
         self.rute = rute

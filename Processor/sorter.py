@@ -14,31 +14,37 @@ class Sorter:
         self.pages_to_search = pages_to_search
         self.product_to_search = product_to_search.lower()
         self.rute = os.path.abspath("..//Interface")
-        self.search_type = search_type
+        self.search_type = self.__define_search_type(search_type)
         self.exact_words = list()
         self.not_exact_words = list()
 
+
+    def __define_search_type(self, search_type):
+        if search_type == 1:
+            return "FRASE_EXACTA"
+        if search_type == 2:
+            return "CONTIENE_TODAS_LAS_PALABRAS"
+        if search_type == 3:
+            return "CONTIENE_ALGUNAS_PALABRAS"
+
     def execute_sorter(self):
-        self.__read_and_sort()
+        self.__read_data()
+        self.__sort_by_price(self.exact_words)
+        self.__index_dict()
         self.__export()
 
-    def __read_and_sort(self):
+    def __read_data(self):
         """
         Lee los archivos .csv con categoria, precio, titulo y lo agrega a una lista con cada posicion con
         listas del tipo ["Page", "Category", "Title", "Price", "Link", "Time"]
-        Esta lista esta ordenado, primeramente por exactitud de la frase que se quiere buscar,
-        y en segundo lugar por el precio mas economico.
         """
-
         for page in self.pages_to_search:
             with open(self.rute + "//" + page + ".csv", 'r', encoding="utf-8") as f:
                 file = csv.DictReader(f, delimiter=",")
 
                 for line in file:
-                    price = line["price"].replace('"', "")
-                    price = price.replace(',', "")
-                    price = price.replace('.00', "")
-                    price = price.replace('.', "")
+                    price = line["price"]
+                    price = self.__normalize_price(price)
 
                     product = [page, line["category"].lower(), line["title"].lower(), int(price), line["link"],
                                line["time"]]
@@ -47,39 +53,44 @@ class Sorter:
                     else:
                         self.not_exact_words.append(product)
 
-        self.exact_words.sort(key=lambda e: e[3])
+
+    def __normalize_price(self, price):
+        price = price.replace('"', "")
+        price = price.replace(',', "")
+        price = price.replace('.00', "")
+        price = price.replace('.', "")
+        return price
 
     def __export(self):
         """
-        Usa el atributo search_tipe que contiene alguna de estas 3 posibilidades de tipo de busqueda:
-        1 - Publicación con la frase exacta"
-        2 - Publicación que contenga todas las palabras"
-        3 - Publicación que contenga algunas de las palabras"
-
-        Segun la elegida, se llamara a una instancia Export con los parametros correspondientes
+        Segun el tipo de busqueda elegida, se llamara a una instancia Export con los parametros correspondientes
+        para que escriba el .csv con los datos ordenados.
         """
-        self.__dict_n_coincidences_to_products()
-        words = self.product_to_search.split()
-        if self.search_type == 1:
+        separated_words = self.product_to_search.split()
+        if self.search_type == "FRASE_EXACTA":
             Export(self.product_to_search, self.exact_words).write()
 
-        elif self.search_type == 2:
-            products_all_words = self.matching_words_to_product[len(words)]
-            products_all_words.sort(key=lambda e: e[3])
+        elif self.search_type == "CONTIENE_TODAS_LAS_PALABRAS":
+            products_all_words = self.matching_words_to_product[len(separated_words)]
+            products_all_words = self.__sort_by_price(products_all_words)
             products_all_words = self.exact_words + products_all_words
             Export(self.product_to_search, products_all_words).write()
 
-        elif self.search_type == 3:
+        elif self.search_type == "CONTIENE_ALGUNAS_PALABRAS":
             products_some_words = list()
-            for x in range(len(words)):
+            for x in range(len(separated_words)):
                 products_some_words += self.matching_words_to_product[x + 1]
-            products_some_words.sort(key=lambda e: e[3])
+
+            self.__sort_by_price(products_some_words)
             products_some_words = self.exact_words + products_some_words
             Export(self.product_to_search, products_some_words).write()
 
-    def __dict_n_coincidences_to_products(self):
+    def __sort_by_price(self, products_list):
+        return products_list.sort(key=lambda e: e[3])
+
+    def __index_dict(self):
         """
-        crea el atributo matching_words_to_product el cual es un diccionario con clave de la cantidad de palabras
+        Crea el diccionario matching_words_to_product el cual indexa con clave de la cantidad de palabras
         que coinciden entre el titulo y lo que se busco. El valor son las listas de productos.
 
         """

@@ -11,6 +11,12 @@ class Sorter:
     """
 
     def __init__(self, pages_to_search, product_to_search, search_type):
+        """
+        :param pages_to_search: Lista de Strings con los nombres de las paginas en las que se quiere buscar.
+        :param product_to_search: String de la busqueda exacta que introdujo el usuario.
+        :param search_type: 1 si se quiere una búsqueda exacta; 2 si se quiere una busqueda que contenga
+        todas las palabras; 3 si se quiere una busqueda que contenga algunas palabras.
+        """
         self.pages_to_search = pages_to_search
         self.product_to_search = product_to_search.lower()
         self.rute = os.path.abspath("..//Interface")
@@ -46,13 +52,27 @@ class Sorter:
                     price = line["price"]
                     price = self.__normalize_price(price)
 
-                    product = [page, line["category"].lower(), line["title"].lower(), int(price), line["link"],
-                               line["time"]]
-                    if line["title"].lower() == self.product_to_search:
-                        self.exact_words.append(product)
-                    else:
-                        self.not_exact_words.append(product)
+                    if not self.__has_NoneType(line):
+                        product = [page, line["category"].lower(), line["title"].lower(), int(price), line["link"],
+                                   line["time"]]
+                        if line["title"].lower() == self.product_to_search:
+                            self.exact_words.append(product)
+                        else:
+                            self.not_exact_words.append(product)
 
+    def __has_NoneType(self, line):
+        if line["price"] == "None" or line["price"] == "NoneType":
+            return True
+        elif line["category"] == "None" or line["price"] == "NoneType":
+            return True
+        elif line["title"] == "None" or line["price"] == "NoneType":
+            return True
+        elif line["link"] == "None" or line["price"] == "NoneType":
+            return True
+        elif line["time"] == "None" or line["price"] == "NoneType":
+            return True
+        else:
+            return False
 
     def __normalize_price(self, price):
         price = price.replace('"', "")
@@ -72,21 +92,23 @@ class Sorter:
 
         elif self.search_type == "CONTIENE_TODAS_LAS_PALABRAS":
             products_all_words = self.matching_words_to_product[len(separated_words)]
-            products_all_words = self.__sort_by_price(products_all_words)
+            self.__sort_by_price(products_all_words)
             products_all_words = self.exact_words + products_all_words
             Export(self.product_to_search, products_all_words).write()
 
         elif self.search_type == "CONTIENE_ALGUNAS_PALABRAS":
             products_some_words = list()
-            for x in range(len(separated_words)):
-                products_some_words += self.matching_words_to_product[x + 1]
-
+            self.__collect_products(products_some_words, range(len(separated_words)))
             self.__sort_by_price(products_some_words)
             products_some_words = self.exact_words + products_some_words
             Export(self.product_to_search, products_some_words).write()
 
+    def __collect_products(self, products_list, amount):
+        for x in amount:
+            products_list += self.matching_words_to_product[x + 1]
+
     def __sort_by_price(self, products_list):
-        return products_list.sort(key=lambda e: e[3])
+        products_list.sort(key=lambda e: e[3])
 
     def __index_dict(self):
         """

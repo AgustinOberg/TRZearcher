@@ -1,7 +1,7 @@
 import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from Searcher.Config.items import TrzpidersItem
+from Back.Searcher.Config.items import TrzpidersItem
 from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
@@ -21,14 +21,13 @@ class GezatekSpider(CrawlSpider):
 
     # Buscamos la url completa
     url = ""
-    filePath = os.path.abspath("../Searcher/Data/pages_complete.txt")
+    filePath = os.path.abspath("../TRZearcher/Back/Searcher/Data/pages_complete.txt")
     with open(filePath, "r") as pages:
         for page in pages:
             if page.find("gezatek") > 0:
                 url = page
-
     start_urls = [url]  # URL donde extraemos los datos
-
+    print(start_urls)
     # Reglas que debera respetar la spider
     rules = {
         # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion

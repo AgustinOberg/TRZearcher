@@ -1,6 +1,6 @@
 import csv
 
-from Processor.export import Export
+from Back.Processor.export import Export
 import os
 
 class Sorter:
@@ -19,7 +19,7 @@ class Sorter:
         """
         self.pages_to_search = pages_to_search
         self.product_to_search = product_to_search.lower()
-        self.rute = os.path.abspath("..//Interface")
+        self.rute = os.path.abspath("../../Front/Interface")
         self.search_type = self.__define_search_type(search_type)
         self.exact_words = list()
         self.not_exact_words = list()

@@ -1,7 +1,8 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
-from Connector.connector import Connector
+import subprocess
+import os
 
 # TODO: Poner mensaje cargando
 
@@ -70,7 +71,27 @@ class Interface (tk.Frame):
         if (str(self.product.get()).strip() == "") and (self.compra_gamer.get() + self.full_hard.get() + self.gezatek.get() + self.venex.get() + self.overdrive.get() <= 0):
             messagebox.showerror(message="Recordar que:\n - La entrada del producto no puede estar vacia\n - Al menos hay que seleccionar una pagina", title="Problema con TRZearcher")
         else:
-            Connector(self.product.get(),self.compra_gamer.get(), self.full_hard.get(), self.gezatek.get(), self.venex.get(), self.overdrive.get(), self.option.get())
+            with open("./Back/Connector/temp_connector.txt", 'w') as pages_file:
+                pages_file.write(str(self.product.get()) + "\n")
+                pages_file.write(str(self.compra_gamer.get()) + "\n")
+                pages_file.write(str(self.full_hard.get()) + "\n")
+                pages_file.write(str(self.gezatek.get()) + "\n")
+                pages_file.write(str(self.venex.get()) + "\n")
+                pages_file.write(str(self.overdrive.get()) + "\n")
+                pages_file.write(str(self.option.get()) + "\n")
+                pages_complete = []
+                number_of_pages = 0
+                fileInitials = os.path.abspath("./Back/Searcher/Data/pages_initials.txt")
+                fileComplete = os.path.abspath("./Back/Searcher/Data/pages_complete.txt")
+                with open(fileInitials, "r") as pages_file:
+                    for page in pages_file:
+                        number_of_pages += 1
+                        page = page.rstrip('\n') + str(self.product.get()) + "\n"
+                        pages_complete.append(page)
+                with open(fileComplete, "w") as pages_file:
+                    for x in range(0, number_of_pages):
+                        pages_file.write(pages_complete[x])
+            subprocess.call("python ./Back/Connector/proyect_connector.py", shell=True)
             self.window.destroy()
 
     def __configurate_button(self):

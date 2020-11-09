@@ -1,2 +1,0 @@
-Verifiquen que pasa si buscan 2 cosas diferentes?
-A mi por ejemplo me busca siempre la anterior

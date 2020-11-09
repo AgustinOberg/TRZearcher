@@ -1,44 +1,48 @@
 import os
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from Searcher.Config.items import TrzpidersItem
+from Back.Searcher.Config.items import TrzpidersItem
 from scrapy.exceptions import CloseSpider
 from datetime import datetime
 
 
-class OverdriveSpider(CrawlSpider):
+class VenexSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.fullh4rd.com.ar
+        Spider que recolecta datos de la pagina www.venex.com.ar
     """
 
-    name = 'overdrive'  # Nombre de la araña
+    name = 'venex'  # Nombre de la araña
 
-    custom_settings = {'FEEDS': {'overdrive.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'venex.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
 
-    allowed_domains = ['www.overdrivepc.com.ar']  # Dominio que manejamos, del cual no puede salir
+    allowed_domain = ['www.venex.com.ar']  # Dominio que manejamos, del cual no puede salir
 
     item_count = 0
 
     # Buscamos la url completa
     url = ""
-    filePath = os.path.abspath("../Searcher/Data/pages_complete.txt")
+    filePath = os.path.abspath("../TRZearcher/Back/Searcher/Data/pages_complete.txt")
     with open(filePath, "r") as pages:
         for page in pages:
-            if page.find("overdrivepc") > 0:
+            if page.find("venex") > 0:
                 url = page
 
     start_urls = [url]  # URL donde extraemos los datos
 
     # Reglas que debera respetar la spider
     rules = {
+        # En el caso de haber pagina siguiente
+        Rule(LinkExtractor(allow=(), restrict_xpaths=(
+            '//*[@title=" Anterior "]'))),
+
         # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
-        Rule(LinkExtractor(allow=(), restrict_xpaths=('//a[@class="js-item-link item-link position-absolute w-100"]')),
+        Rule(LinkExtractor(allow=(), restrict_xpaths=('//*[@class="product-box-price clearfix"]')),
              callback='parse_item', follow=False)
     }
 
     # En el caso de existir el archivo, lo elimina
     try:
-        os.remove('overdrive.csv')
+        os.remove('venex.csv')
     except OSError:
         pass
 
@@ -46,16 +50,17 @@ class OverdriveSpider(CrawlSpider):
         """
             Recolecta la informacion de cada item
         """
+
         item = TrzpidersItem()
 
         item['title'] = str(response.css(
-            '#product-name::text').extract_first()).lower().capitalize().rstrip('\n').strip()
+            '.tituloProducto::text').extract_first()).strip()
 
         item['price'] = str(response.css(
-            '#price_display::text').extract_first()).rstrip('\n').strip().split("$")[1]
+            '.text-green::text').extract_first()).strip().split("$")[1]
 
         item['category'] = str(response.css(
-            '.crumb:nth-child(5)::text').extract()).capitalize().strip()[2:-2]
+            '.headerNavigation+ .headerNavigation::text').extract_first()).capitalize().strip()
 
         item['link'] = str(response.url)
 

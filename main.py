@@ -1,4 +1,4 @@
-from Interface.interface import Interface
+from Front.Interface.interface import Interface
 import tkinter as tk
 
 root = tk.Tk()

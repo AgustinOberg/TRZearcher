@@ -1,6 +1,6 @@
 import csv
 
-from Processor.export import Export
+from Back.Processor.export import Export
 import os
 
 class Sorter:
@@ -19,18 +19,17 @@ class Sorter:
         """
         self.pages_to_search = pages_to_search
         self.product_to_search = product_to_search.lower()
-        self.rute = os.path.abspath("..//Interface")
         self.search_type = self.__define_search_type(search_type)
         self.exact_words = list()
         self.not_exact_words = list()
 
 
     def __define_search_type(self, search_type):
-        if search_type == 1:
+        if int(search_type) == 1:
             return "FRASE_EXACTA"
-        if search_type == 2:
+        if int(search_type) == 2:
             return "CONTIENE_TODAS_LAS_PALABRAS"
-        if search_type == 3:
+        if int(search_type) == 3:
             return "CONTIENE_ALGUNAS_PALABRAS"
 
     def execute_sorter(self):
@@ -45,7 +44,7 @@ class Sorter:
         listas del tipo ["Page", "Category", "Title", "Price", "Link", "Time"]
         """
         for page in self.pages_to_search:
-            with open(self.rute + "//" + page + ".csv", 'r', encoding="utf-8") as f:
+            with open(page + ".csv", 'r', encoding="utf-8") as f:
                 file = csv.DictReader(f, delimiter=",")
 
                 for line in file:
@@ -86,6 +85,7 @@ class Sorter:
         Segun el tipo de busqueda elegida, se llamara a una instancia Export con los parametros correspondientes
         para que escriba el .csv con los datos ordenados.
         """
+
         separated_words = self.product_to_search.split()
         if self.search_type == "FRASE_EXACTA":
             Export(self.product_to_search, self.exact_words).write()

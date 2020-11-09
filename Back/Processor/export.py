@@ -27,7 +27,7 @@ class Export:
         El archivo .csv generado tendrá por nombre la búsqueda y la fecha en que se realizó.
         Escribe los productos que fueron pasados por parámetro en el constructor en él.
         """
-        file = open(os.path.abspath("../../TRZearcher") + "//" + self.file_name, "w", newline='\n')
+        file = open(self.file_name, "w", newline='\n')
         with file:
             write = csv.writer(file)
             write.writerow(["Page", "Category", "Title", "Price", "Link", "Time"])

@@ -22,3 +22,12 @@ class Connector:
         print(self.pages)
         Orchestrator().execute_spiders(self.pages)
         Sorter(self.pages, self.product, type_search).execute_sorter()
+        self.__clean()
+
+    def __clean(self):
+        os.remove("./Back/Connector/temp_connector.txt")
+        os.remove("compragamer.csv")
+        os.remove("fullh4rd.csv")
+        os.remove("gezatek.csv")
+        os.remove("overdrive.csv")
+        os.remove("venex.csv")

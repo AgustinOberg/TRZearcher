@@ -21,4 +21,4 @@ class Connector:
         self.type_search = type_search
         print(self.pages)
         Orchestrator().execute_spiders(self.pages)
-        #Sorter(self.pages, self.product, type_search).execute_sorter()
+        Sorter(self.pages, self.product, type_search).execute_sorter()

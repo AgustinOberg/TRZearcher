@@ -8,18 +8,17 @@ from datetime import datetime
 
 class Fullh4ardSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.fullh4rd.com.ar
+        Spider que recolecta datos de la pagina www.fullh4rd.com.ar, con un limite de 15
     """
 
-    name = 'fullh4ard'  # Nombre de la araña
+    name = 'fullh4ard'
 
-    custom_settings = {'FEEDS': {'fullh4rd.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'fullh4rd.csv': {'format': 'csv'}}}
 
-    allowed_domains = ['www.fullh4rd.com.ar']  # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['www.fullh4rd.com.ar']
 
     item_count = 0
 
-    # Buscamos la url completa
     url = ""
     filePath = os.path.abspath("../TRZearcher/Back/Searcher/Data/pages_complete.txt")
     with open(filePath, "r") as pages:
@@ -27,16 +26,13 @@ class Fullh4ardSpider(CrawlSpider):
             if page.find("fullh4rd") > 0:
                 url = page
 
-    start_urls = [url]  # URL donde extraemos los datos
+    start_urls = [url]
 
-    # Reglas que debera respetar la spider
     rules = {
-        # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
         Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="item product-list"]')),
              callback='parse_item', follow=False)
     }
 
-    # En el caso de existir el archivo, lo elimina
     try:
         os.remove('fullh4rd.csv')
     except OSError:

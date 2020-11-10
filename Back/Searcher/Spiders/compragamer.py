@@ -8,18 +8,17 @@ from datetime import datetime
 
 class CompragamerSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.compragamer.com
+        Spider que recolecta datos de la pagina www.compragamer.com, con un limite de 15
     """
 
-    name = 'compragamer'  # Nombre de la araña
+    name = 'compragamer'
 
-    custom_settings = {'FEEDS': {'compragamer.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'compragamer.csv': {'format': 'csv'}}}
 
-    allowed_domains = ['compragamer.com']  # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['compragamer.com']
 
     item_count = 0
 
-    # Buscamos la url completa
     url = ""
     filePath = os.path.abspath("../TRZearcher/Back/Searcher/Data/pages_complete.txt")
     with open(filePath, "r") as pages:
@@ -27,16 +26,13 @@ class CompragamerSpider(CrawlSpider):
             if page.find("compragamer") > 0:
                 url = page
 
-    start_urls = [url]  # URL donde extraemos los datos
+    start_urls = [url]
 
-    # Reglas que debera respetar la spider
     rules = {
-        # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
         Rule(LinkExtractor(allow=(), restrict_xpaths=('//*[@class="products__item"]')),
              callback='parse_item', follow=False)
     }
 
-    # En el caso de existir el archivo, lo elimina
     try:
         os.remove('compragamer.csv')
     except OSError:

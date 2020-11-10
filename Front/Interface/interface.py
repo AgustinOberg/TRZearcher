@@ -68,7 +68,7 @@ class Interface (tk.Frame):
         self.option.set(3)
 
     def __code_button(self):
-        if (str(self.product.get()).strip() == "") and (self.compra_gamer.get() + self.full_hard.get() + self.gezatek.get() + self.venex.get() + self.overdrive.get() <= 0):
+        if (str(self.product.get()).strip() == "") or (self.compra_gamer.get() + self.full_hard.get() + self.gezatek.get() + self.venex.get() + self.overdrive.get() <= 0):
             messagebox.showerror(message="Recordar que:\n - La entrada del producto no puede estar vacia\n - Al menos hay que seleccionar una pagina", title="Problema con TRZearcher")
         else:
             self.__write_data_connector()

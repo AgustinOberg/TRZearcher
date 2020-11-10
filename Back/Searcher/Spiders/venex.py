@@ -8,18 +8,17 @@ from datetime import datetime
 
 class VenexSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.venex.com.ar
+        Spider que recolecta datos de la pagina www.venex.com.ar, con un limite de 15
     """
 
-    name = 'venex'  # Nombre de la araña
+    name = 'venex'
 
-    custom_settings = {'FEEDS': {'venex.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'venex.csv': {'format': 'csv'}}}
 
-    allowed_domain = ['www.venex.com.ar']  # Dominio que manejamos, del cual no puede salir
+    allowed_domain = ['www.venex.com.ar']
 
     item_count = 0
 
-    # Buscamos la url completa
     url = ""
     filePath = os.path.abspath("../TRZearcher/Back/Searcher/Data/pages_complete.txt")
     with open(filePath, "r") as pages:
@@ -27,20 +26,16 @@ class VenexSpider(CrawlSpider):
             if page.find("venex") > 0:
                 url = page
 
-    start_urls = [url]  # URL donde extraemos los datos
+    start_urls = [url]
 
-    # Reglas que debera respetar la spider
     rules = {
-        # En el caso de haber pagina siguiente
         Rule(LinkExtractor(allow=(), restrict_xpaths=(
             '//*[@title=" Anterior "]'))),
 
-        # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
         Rule(LinkExtractor(allow=(), restrict_xpaths=('//*[@class="product-box-price clearfix"]')),
              callback='parse_item', follow=False)
     }
 
-    # En el caso de existir el archivo, lo elimina
     try:
         os.remove('venex.csv')
     except OSError:

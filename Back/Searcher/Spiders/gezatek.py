@@ -8,34 +8,31 @@ from datetime import datetime
 
 class GezatekSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.gezatek.com.ar
+        Spider que recolecta datos de la pagina www.gezatek.com.ar, con un limite de 15
     """
 
-    name = 'gezatek'  # Nombre de la araña
+    name = 'gezatek'
 
-    custom_settings = {'FEEDS': {'gezatek.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'gezatek.csv': {'format': 'csv'}}}
 
-    allowed_domains = ['www.gezatek.com.ar']  # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['www.gezatek.com.ar']
 
     item_count = 0
 
-    # Buscamos la url completa
     url = ""
     filePath = os.path.abspath("../TRZearcher/Back/Searcher/Data/pages_complete.txt")
     with open(filePath, "r") as pages:
         for page in pages:
             if page.find("gezatek") > 0:
                 url = page
-    start_urls = [url]  # URL donde extraemos los datos
-    print(start_urls)
-    # Reglas que debera respetar la spider
+
+    start_urls = [url]
+
     rules = {
-        # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
         Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="w-box product "]')),
              callback='parse_item', follow=False)
     }
 
-    # En el caso de existir el archivo, lo elimina
     try:
         os.remove('gezatek.csv')
     except OSError:

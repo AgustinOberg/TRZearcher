@@ -8,18 +8,17 @@ from datetime import datetime
 
 class OverdriveSpider(CrawlSpider):
     """
-        Spider que recolecta datos de la pagina www.fullh4rd.com.ar
+        Spider que recolecta datos de la pagina www.fullh4rd.com.ar, con un limite de 15
     """
 
-    name = 'overdrive'  # Nombre de la araña
+    name = 'overdrive'
 
-    custom_settings = {'FEEDS': {'overdrive.csv': {'format': 'csv'}}}  # Forma de exportar los datos recolectados
+    custom_settings = {'FEEDS': {'overdrive.csv': {'format': 'csv'}}}
 
-    allowed_domains = ['www.overdrivepc.com.ar']  # Dominio que manejamos, del cual no puede salir
+    allowed_domains = ['www.overdrivepc.com.ar']
 
     item_count = 0
 
-    # Buscamos la url completa
     url = ""
     filePath = os.path.abspath("../TRZearcher/Back/Searcher/Data/pages_complete.txt")
     with open(filePath, "r") as pages:
@@ -27,16 +26,13 @@ class OverdriveSpider(CrawlSpider):
             if page.find("overdrivepc") > 0:
                 url = page
 
-    start_urls = [url]  # URL donde extraemos los datos
+    start_urls = [url]
 
-    # Reglas que debera respetar la spider
     rules = {
-        # Entra en cada item (para extraer los datos) y luego vuelve a la pagina de extraccion
         Rule(LinkExtractor(allow=(), restrict_xpaths=('//a[@class="js-item-link item-link position-absolute w-100"]')),
              callback='parse_item', follow=False)
     }
 
-    # En el caso de existir el archivo, lo elimina
     try:
         os.remove('overdrive.csv')
     except OSError:
@@ -46,6 +42,7 @@ class OverdriveSpider(CrawlSpider):
         """
             Recolecta la informacion de cada item
         """
+
         item = TrzpidersItem()
 
         item['title'] = str(response.css(

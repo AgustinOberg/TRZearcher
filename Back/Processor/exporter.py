@@ -27,7 +27,7 @@ class Exporter:
         El archivo .csv generado tendrá por nombre la búsqueda y la fecha en que se realizó.
         Escribe los productos que fueron pasados por parámetro en el constructor en él.
         """
-        file = open(self.file_name + ".csv", "w", newline='\n')
+        file = open(self.file_name + ".csv", "w", newline='\n', encoding="utf-8")
         with file:
             write = csv.writer(file)
             write.writerow(["Page", "Category", "Title", "Price", "Link", "Time"])
@@ -68,14 +68,14 @@ class Exporter:
         <tbody>
 
         '''
-        file = open(self.file_name + ".html", "w", newline='\n')
+        file = open(self.file_name + ".html", "w", newline='\n', encoding="utf-8")
         with file:
             file.write(base)
             for product in self.ordered_products:
                 string_product = '<tr> <th scope="row">' + product[1] + '</th> <td> <a href="' + product[4] + '" target="_blank">' + \
                                  product[2] + '</a> </td> <td>' + str(product[3]) + '</td> <td>' + product[5] + '</td> </tr>'
 
-                file.write(string_product)
+                file.write(string_product.replace('\x93', " ").strip())
 
             final_string = '''
                      </tbody>

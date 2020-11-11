@@ -1,6 +1,6 @@
 import csv
 
-from Back.Processor.export import Export
+from Back.Processor.exporter import Exporter
 import os
 
 class Sorter:
@@ -88,23 +88,29 @@ class Sorter:
 
         separated_words = self.product_to_search.split()
         if self.search_type == "FRASE_EXACTA":
-            Export(self.product_to_search, self.exact_words).write_csv()
-            Export(self.product_to_search, self.exact_words).write_html()
+            exporter = Exporter(self.product_to_search, self.exact_words)
+            exporter.write_csv()
+            exporter.write_html()
+            exporter.write_json()
 
         elif self.search_type == "CONTIENE_TODAS_LAS_PALABRAS":
             products_all_words = self.matching_words_to_product[len(separated_words)]
             self.__sort_by_price(products_all_words)
             products_all_words = self.exact_words + products_all_words
-            Export(self.product_to_search, products_all_words).write_csv()
-            Export(self.product_to_search, products_all_words).write_html()
+            exporter = Exporter(self.product_to_search, products_all_words)
+            exporter.write_csv()
+            exporter.write_html()
+            exporter.write_json()
 
         elif self.search_type == "CONTIENE_ALGUNAS_PALABRAS":
             products_some_words = list()
             self.__collect_products(products_some_words, range(len(separated_words)))
             self.__sort_by_price(products_some_words)
             products_some_words = self.exact_words + products_some_words
-            Export(self.product_to_search, products_some_words).write_csv()
-            Export(self.product_to_search, products_some_words).write_html()
+            exporter = Exporter(self.product_to_search, products_some_words)
+            exporter.write_csv()
+            exporter.write_html()
+            exporter.write_json()
 
     def __collect_products(self, products_list, amount):
         for x in amount:
@@ -138,6 +144,3 @@ class Sorter:
         words = self.product_to_search.split()
         for x in range(len(words) + 1):
             self.matching_words_to_product[x] = list()
-
-if __name__ == '__main__':
-    Sorter(["gezatek" , "compragamer", "venex", "fullh4rd"], "auriculares", 2).execute_sorter()

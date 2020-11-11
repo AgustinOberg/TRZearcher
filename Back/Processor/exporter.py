@@ -1,9 +1,9 @@
 import csv
 from datetime import datetime
-import os
+import json
 
 
-class Export:
+class Exporter:
 
     """
         La clase Export recibe por parametro el producto que estamos buscando, y una lista con listas en cada posicion
@@ -85,3 +85,23 @@ class Export:
             '''
             file.write(final_string)
             file.close()
+
+    def write_json(self):
+        file = open(self.file_name + ".json", "w", newline='\n')
+        final_dict = dict()
+        final_dict["products"] = list()
+        for product in self.ordered_products:
+            dict_json = self.__make_product_dict(product)
+            final_dict["products"].append(dict_json)
+        with file:
+            json.dump(final_dict, file, indent=2)
+
+
+    def __make_product_dict(self, list):
+        keys = ["Page", "Category", "Title", "Price", "Link", "Time"]
+        dictionary = dict()
+        i = 0
+        for key in keys:
+            dictionary[key] = list[i]
+            i+=1
+        return dictionary

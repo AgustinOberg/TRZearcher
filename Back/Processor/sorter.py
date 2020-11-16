@@ -89,18 +89,14 @@ class Sorter:
         separated_words = self.product_to_search.split()
         if self.search_type == "FRASE_EXACTA":
             exporter = Exporter(self.product_to_search, self.exact_words)
-            exporter.write_csv()
-            exporter.write_html()
-            exporter.write_json()
+            self.__write(exporter)
 
         elif self.search_type == "CONTIENE_TODAS_LAS_PALABRAS":
             products_all_words = self.matching_words_to_product[len(separated_words)]
             self.__sort_by_price(products_all_words)
             products_all_words = self.exact_words + products_all_words
             exporter = Exporter(self.product_to_search, products_all_words)
-            exporter.write_csv()
-            exporter.write_html()
-            exporter.write_json()
+            self.__write(exporter)
 
         elif self.search_type == "CONTIENE_ALGUNAS_PALABRAS":
             products_some_words = list()
@@ -108,9 +104,12 @@ class Sorter:
             self.__sort_by_price(products_some_words)
             products_some_words = self.exact_words + products_some_words
             exporter = Exporter(self.product_to_search, products_some_words)
-            exporter.write_csv()
-            exporter.write_html()
-            exporter.write_json()
+            self.__write(exporter)
+
+    def __write(self, exporter):
+        exporter.write_csv()
+        exporter.write_html()
+        exporter.write_json()
 
     def __collect_products(self, products_list, amount):
         for x in amount:
